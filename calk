@@ -1,0 +1,115 @@
+import java.util.Scanner;
+
+
+public class Main {
+
+    public static void main(String[] args) throws Exception {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Ожидаю два арабских или римских числа: ");
+        String primer = scanner.nextLine();
+        System.out.println(probor(primer));
+    }
+    public static String probor(String primer) throws Exception {
+        int ch1;
+        int ch2;
+        String oper;
+        String result;
+        boolean Rimsk;
+        String[] operands = primer.split("[+\\-*/]");
+        if (operands.length != 2) throw new Exception("Программа принимает всего два операнда и один оператор (+, -, /, *)");
+        oper = poiskOper(primer);
+        if (oper == null) throw new Exception("Неподдерживаемая операция");
+
+
+
+        if (Roman.Rimsk(operands[0]) && Roman.Rimsk(operands[1])) {
+            ch1 = Roman.convertToArabian(operands[0]);
+            ch2 = Roman.convertToArabian(operands[1]);
+            Rimsk = true;
+        }
+        else if (!Roman.Rimsk(operands[0]) && !Roman.Rimsk(operands[1])) {
+            ch1 = Integer.parseInt(operands[0]);
+            ch2 = Integer.parseInt(operands[1]);
+            Rimsk = false;
+        }
+        else {
+            throw new Exception("Программа не принимает одновременно разные системы счисления");
+        }
+
+
+
+        if (ch1 > 10 || ch2 > 10) {
+            throw new Exception("Числа должны быть от 1 до 10");
+        }
+        int arabian = calc(ch1, ch2, oper);
+        
+        if (Rimsk) {
+            if (arabian <= 0) {
+                throw new Exception("В римской системе счисления нет отрицательных чисел");
+            }
+            result = Roman.convertToRoman(arabian);
+        }
+        
+        else {
+            result = String.valueOf(arabian);
+        }
+
+        return result;
+    }
+
+    static String poiskOper(String primer) {
+        if (primer.contains("+")) return "+";
+        else if (primer.contains("-")) return "-";
+        else if (primer.contains("*")) return "*";
+        else if (primer.contains("/")) return "/";
+        else return null;
+    }
+
+    static int calc(int a, int b, String oper) {
+
+        if (oper.equals("+")) return a + b;
+        else if (oper.equals("-")) return a - b;
+        else if (oper.equals("*")) return a * b;
+        else return a / b;
+    }
+
+}
+
+class Roman {
+    static String[] romanArray = new String[]{"0", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI",
+            "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX", "XXI", "XXII", "XXIII", "XXIV",
+            "XXV", "XXVI", "XXVII", "XXVIII", "XXIX", "XXX", "XXXI", "XXXII", "XXXIII", "XXXIV", "XXXV", "XXXVI",
+            "XXXVII", "XXXVIII", "XXXIX", "XL", "XLI", "XLII", "XLIII", "XLIV", "XLV", "XLVI", "XLVII", "XLVIII",
+            "XLIX", "L", "LI", "LII", "LIII", "LIV", "LV", "LVI", "LVII", "LVIII", "LIX", "LX", "LXI", "LXII",
+            "LXIII", "LXIV", "LXV", "LXVI", "LXVII", "LXVIII", "LXIX", "LXX", "LXXI", "LXXII", "LXXIII", "LXXIV",
+            "LXXV", "LXXVI", "LXXVII", "LXXVIII", "LXXIX", "LXXX", "LXXXI", "LXXXII", "LXXXIII", "LXXXIV", "LXXXV",
+            "LXXXVI", "LXXXVII", "LXXXVIII", "LXXXIX", "XC", "XCI", "XCII", "XCIII", "XCIV", "XCV", "XCVI", "XCVII",
+            "XCVIII", "XCIX", "C"};
+
+
+    public static boolean Rimsk(String val) {
+        for (String s : romanArray) {
+            if (val.equals(s)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static int convertToArabian(String roman) {
+        for (int i = 0; i < romanArray.length; i++) {
+            if (roman.equals(romanArray[i])) {
+                return i;
+            }
+        }
+            return -1;
+    }
+
+    public static String convertToRoman(int arabian) {
+        return romanArray[arabian];
+    }
+
+
+
+
+}
